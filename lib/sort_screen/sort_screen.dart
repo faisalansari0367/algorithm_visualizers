@@ -43,6 +43,14 @@ class _BubbleSortState extends State<BubbleSort> {
     return ChangeNotifierProvider.value(
       value: cubit,
       child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'Bubble Sort',
+            style: TextStyle(color: context.theme.colorScheme.primary),
+          ),
+          backgroundColor: context.theme.scaffoldBackgroundColor,
+          elevation: 0,
+        ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -51,21 +59,35 @@ class _BubbleSortState extends State<BubbleSort> {
               const SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Selector<BubbleSortCubit, int>(
-                  builder: (context, value, child) => AnimatedFlipCounter(
-                    value: value,
-                    prefix: 'Total iterations count: ',
-                    curve: Curves.easeInOut,
-                    // child: Text(
-
-                    // 'Total iterations count: $value',
-                    textStyle: context.textTheme.headline6,
-                  ),
-                  selector: (context, state) => state.iterations,
+                child: Column(
+                  children: [
+                    Selector<BubbleSortCubit, int>(
+                      builder: (context, value, child) => AnimatedFlipCounter(
+                        value: value,
+                        prefix: 'Total iterations count: ',
+                        curve: Curves.easeInOut,
+                        textStyle: context.textTheme.headline6,
+                      ),
+                      selector: (context, state) => state.iterations,
+                    ),
+                    const SizedBox(height: 10),
+                    Selector<BubbleSortCubit, String>(
+                      builder: (context, value, child) => Text(value),
+                      selector: (context, state) => state.status,
+                    )
+                  ],
                 ),
               ),
               const SizedBox(height: 20),
               const Expanded(child: ArrayWidget()),
+              Selector<BubbleSortCubit, double>(
+                builder: (context, value, child) => Slider(
+                  value: value / 1000,
+                  onChanged: Provider.of<BubbleSortCubit>(context, listen: false).setSpeed,
+                ),
+                selector: (context, state) => state.speed,
+              ),
+             
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
