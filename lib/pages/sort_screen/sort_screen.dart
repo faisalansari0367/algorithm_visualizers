@@ -1,51 +1,45 @@
-import 'dart:math';
-
+import 'package:algorithm_visualizers/providers/sort_provider.dart';
 import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-import 'cubit/bubble_sort_cubit.dart';
 import 'widgets/array.dart';
 
-class BubbleSort extends StatefulWidget {
-  const BubbleSort({Key? key}) : super(key: key);
+class SortScreen<T> extends StatefulWidget {
+  final String title;
+  final SortProvider<T> sortProvider;
+
+  const SortScreen({Key? key, required this.title, required this.sortProvider}) : super(key: key);
 
   @override
-  State<BubbleSort> createState() => _BubbleSortState();
+  State<SortScreen> createState() => _SortScreenState();
 }
 
-class _BubbleSortState extends State<BubbleSort> {
+class _SortScreenState<T> extends State<SortScreen> {
   late List<int> array;
-  late BubbleSortCubit cubit;
+  // late SortProvider<T> cubit;
 
   @override
   void initState() {
-    generateArray();
-    final array = List.generate(20, (index) => index + 1);
-    cubit = BubbleSortCubit(array: array);
+    // cubit = SortProvider<T>();
     super.initState();
   }
 
   @override
   void dispose() {
-    cubit.dispose();
+    // cubit.dispose();
     super.dispose();
-  }
-
-  void generateArray() {
-    array = List.generate(100, (index) => Random().nextInt(100));
-    array = array.toSet().toList();
   }
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
-      value: cubit,
+      value: widget.sortProvider,
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            'Bubble Sort',
+            widget.title,
             style: TextStyle(color: context.theme.colorScheme.primary),
           ),
           backgroundColor: context.theme.scaffoldBackgroundColor,
@@ -56,12 +50,13 @@ class _BubbleSortState extends State<BubbleSort> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 10),
+              // const SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Selector<BubbleSortCubit, int>(
+                    Selector<SortProvider, int>(
                       builder: (context, value, child) => AnimatedFlipCounter(
                         value: value,
                         prefix: 'Total iterations count: ',
@@ -71,7 +66,7 @@ class _BubbleSortState extends State<BubbleSort> {
                       selector: (context, state) => state.iterations,
                     ),
                     const SizedBox(height: 10),
-                    Selector<BubbleSortCubit, String>(
+                    Selector<SortProvider, String>(
                       builder: (context, value, child) => Text(value),
                       selector: (context, state) => state.status,
                     )
@@ -80,25 +75,34 @@ class _BubbleSortState extends State<BubbleSort> {
               ),
               const SizedBox(height: 20),
               const Expanded(child: ArrayWidget()),
-              Selector<BubbleSortCubit, double>(
-                builder: (context, value, child) => Slider(
-                  value: value / 1000,
-                  onChanged: Provider.of<BubbleSortCubit>(context, listen: false).setSpeed,
+              Selector<SortProvider, double>(
+                builder: (context, value, child) => Column(
+                  children: [
+                    Text('Animation speed: ${value.toStringAsFixed(0)} ms'),
+                    Slider(
+                      value: value / 1000,
+                      onChanged: Provider.of<SortProvider>(context, listen: false).setSpeed,
+                    ),
+                  ],
                 ),
                 selector: (context, state) => state.speed,
               ),
-             
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   ElevatedButton(
-                    onPressed: cubit.bubbleSort,
+                    onPressed: widget.sortProvider.sortMethod,
                     child: const Text('Sort Array'),
                   ),
                   // const SizedBox(height: 10),
                   ElevatedButton(
-                    onPressed: cubit.shuffleArray,
+                    onPressed: widget.sortProvider.shuffleArray,
                     child: const Text('Shuffle Array'),
+                  ),
+
+                  ElevatedButton(
+                    onPressed: widget.sortProvider.reverseArray,
+                    child: const Text('Reverse Array'),
                   ),
                 ],
               ),

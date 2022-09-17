@@ -18,17 +18,20 @@ class ElementWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final selectedColor = isSelected ? context.theme.colorScheme.primary : Colors.white;
-    final selectedTextColor = isSelected ? Colors.white : Colors.grey.shade900;
+    final selectedColor =
+        isSelected ? context.theme.colorScheme.primary : const Color.fromARGB(255, 255, 255, 255);
+    final selectedTextColor =
+        isSelected || currentCheckingItem ? Colors.white : Colors.grey.shade900;
     final selectedSize = size.height;
     return AnimatedContainer(
       duration: duration,
-      padding: const EdgeInsets.all(10),
+      // padding: const EdgeInsets.all(10),
       alignment: Alignment.center,
       height: selectedSize,
       width: selectedSize,
       curve: Curves.easeIn,
       decoration: BoxDecoration(
+        // shape: !isSelected || !currentCheckingItem ? BoxShape.rectangle : BoxShape.circle,
         shape: BoxShape.circle,
         color: currentCheckingItem ? context.theme.colorScheme.secondary : selectedColor,
         boxShadow: [
