@@ -19,5 +19,5 @@ samples, guidance on mobile development, and a full API reference.
 
 <video width="320" height="240" controls>
   <source src="screen-recording-2023-04-28-at-103454-pm_nipq73AO.mp4" type="video/mp4">
-  Your browser does not support the video tag.
+
 </video>
