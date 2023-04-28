@@ -12,17 +12,7 @@ To run the visualizers, you will need to have Flutter installed on your machine.
 Once you have installed Flutter, you can clone this repository to your local machine and run the visualizers using the following commands:
 
 ```
-cd insertion_sort_visualizer
-flutter run
-```
-
-```
-cd selection_sort_visualizer
-flutter run
-```
-
-```
-cd bubble_sort_visualizer
+cd algorithm_visualizers
 flutter run
 ```
 
